@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import CategoryList from './components/CategoryList';
-import ProductList from './components/ProductList';
+import { CategoryList } from './components/category/CategoryList';
+import { ProductList } from './components/product/ProductList';
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -13,7 +13,10 @@ function App() {
       </header>
       <div className="container">
         <aside className="sidebar">
-          <CategoryList onSelectCategory={setSelectedCategory} />
+          <CategoryList 
+            selectedId={selectedCategory} 
+            onSelectCategory={setSelectedCategory} 
+          />
         </aside>
         <main className="main-content">
           <ProductList categoryId={selectedCategory} />
