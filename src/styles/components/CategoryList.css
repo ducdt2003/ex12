@@ -1,0 +1,14 @@
+.category-list h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.category-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
