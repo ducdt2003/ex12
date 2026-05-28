@@ -1,12 +1,18 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { Credentials } from "../types";
 
 const API_BASE_URL = "http://localhost:9091/auth";
 
+interface LoginResponse {
+  token: string;
+  [key: string]: any;
+}
+
 const authService = {
-  login: async (credentials) => {
+  login: async (credentials: Credentials): Promise<LoginResponse> => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+      const response = await axios.post<LoginResponse>(`${API_BASE_URL}/login`, credentials);
       
       toast.success("Đăng nhập thành công! 🈀", {
         position: "top-right",
@@ -14,9 +20,10 @@ const authService = {
       });
       
       return response.data;
-    } catch (error) {
-      const status = error.response?.status;
-      const serverMessage = error.response?.data?.message;
+    } catch (error: unknown) {
+      const axiosError = error instanceof AxiosError ? error : new AxiosError('Unknown error');
+      const status = axiosError.response?.status;
+      const serverMessage = axiosError.response?.data?.message as string | undefined;
       let errorMessage = serverMessage;
 
       if (status === 401) {
@@ -37,8 +44,8 @@ const authService = {
           autoClose: 3000,
         });
       }
-      const customError = new Error(errorMessage);
-      customError.response = error.response;
+      
+      const customError = new Error(errorMessage || "Đăng nhập thất bại");
       throw customError;
     }
   },

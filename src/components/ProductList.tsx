@@ -1,11 +1,18 @@
 import React from "react";
-import ProductCard from "./ProductCard"; // ✅ Import component ProductCard để tái sử dụng
+import ProductCard from "./ProductCard";
+import { Product } from "../types";
 import "../styles/ProductList.scss";
+
+interface ProductListProps {
+  products: Product[];
+  loading: boolean;
+  error?: string | null;
+}
 
 /**
  * Linh kiện quản lý và lặp hiển thị danh sách sản phẩm
  */
-const ProductList = ({ products, loading, error }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, loading, error }) => {
   if (loading) {
     return (
       <div className="product-list__loading">

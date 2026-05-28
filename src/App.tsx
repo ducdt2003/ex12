@@ -20,29 +20,29 @@ import AddProductForm from "./components/AddProductForm";
 import "./App.css";
 import ProductDetail from "./components/ProductDetail";
 import LoginPage from "./views/LoginPage";
-import { loginAction, logoutAction } from "./store/actions/authActions";
+import { RootState, AppDispatch } from "./store";
 
 function App() {
-  const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedCategory, setSelectedCategory] = useState<string | number | null>(null);
 
   const { products, loading, currentPage, totalPages, isFirst, isLast } =
-    useSelector((state) => state.product);
+    useSelector((state: RootState) => state.product);
 
   useEffect(() => {
-    if (selectedCategory) {
-      dispatch(fetchProductsByCategory(selectedCategory, 0, 10));
+    if (selectedCategory !== null) {
+      void dispatch(fetchProductsByCategory(selectedCategory, 0, 10));
     } else {
-      dispatch(fetchProducts(0, 10));
+      void dispatch(fetchProducts(0, 10));
     }
   }, [dispatch, selectedCategory]);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number): void => {
     if (newPage >= 0 && newPage < totalPages) {
-      if (selectedCategory) {
-        dispatch(fetchProductsByCategory(selectedCategory, newPage, 10));
+      if (selectedCategory !== null) {
+        void dispatch(fetchProductsByCategory(selectedCategory, newPage, 10));
       } else {
-        dispatch(fetchProducts(newPage, 10));
+        void dispatch(fetchProducts(newPage, 10));
       }
     }
   };
@@ -90,13 +90,13 @@ function App() {
 
                     <AddProductForm
                       onFetchDataAgain={() => {
-                        if (selectedCategory) {
+                        if (selectedCategory !== null) {
                           // Nếu đang lọc theo danh mục, thêm xong thì tải lại đúng danh mục đó ở trang đầu
                           dispatch(
-                            fetchProductsByCategory(selectedCategory, 0, 10),
+                            fetchProductsByCategory(selectedCategory, 0, 10) as any
                           );
                         } else {
-                          dispatch(fetchProducts(0, 10));
+                          dispatch(fetchProducts(0, 10) as any);
                         }
                       }}
                     />

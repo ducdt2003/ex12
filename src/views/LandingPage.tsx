@@ -1,34 +1,42 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // ✅ Thêm import để kết nối Redux
-import { logoutAction } from "../store/actions/authActions"; // ✅ Thêm import action đăng xuất
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../store/actions/authActions";
 import "../styles/LandingPage.scss";
+import { RootState, AppDispatch } from "../store";
+
+interface LandingPageProps {
+  onNavigate?: (destination: string) => void;
+}
 
 /**
  * Trang landing - trang mặc định khi vào ứng dụng
  */
-const LandingPage = () => {
+const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // 🌟 Lấy trạng thái đăng nhập từ Redux Store công cộng
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  const handleNavigate = (path) => {
-    navigate(path);
+  const handleNavigate = (path: string) => {
+    if (onNavigate) {
+      onNavigate(path);
+    } else {
+      navigate(path);
+    }
   };
 
   // 🌟 Hàm xử lý khi người dùng click vào nút Auth
   const handleAuthClick = () => {
     if (isAuthenticated) {
-      dispatch(logoutAction());
+      dispatch(logoutAction() as any);
       alert("👋 Bạn đã đăng xuất thành công!");
     } else {
-      navigate("/login"); // Điều hướng sang trang nhập form tài khoản
+      navigate("/login");
     }
   };
 
-  // Thay thế đoạn return trong file LandingPage.js của bạn bằng cấu trúc sạch sẽ này:
   return (
     <div className="landing-page">
       <nav className="landing-page__nav">
@@ -67,7 +75,6 @@ const LandingPage = () => {
             >
               📁 Xem Danh Mục
             </button>
-
           </div>
         </div>
       </main>

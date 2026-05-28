@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addProduct } from "../store/actions/productActions";
-import categoryService from "../services/categoryService"; // Import để lấy list danh mục chọn
+import categoryService from "../services/categoryService";
+import { Category } from "../types";
+import { AppDispatch } from "../store";
 
-const AddProductForm = ({ onFetchDataAgain }) => {
-  const dispatch = useDispatch();
-  const [categories, setCategories] = useState([]); // Lưu danh sách danh mục để chọn
+interface AddProductFormProps {
+  onFetchDataAgain?: () => void;
+}
+
+const AddProductForm: React.FC<AddProductFormProps> = ({ onFetchDataAgain }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // State quản lý các ô input điền form
   const [formData, setFormData] = useState({
@@ -20,7 +26,6 @@ const AddProductForm = ({ onFetchDataAgain }) => {
     const loadCategories = async () => {
       try {
         const res = await categoryService.getAllCategories();
-        // API categories trả về dạng: { status: 200, data: [...] }
         setCategories(res.data || []);
       } catch (err) {
         console.error("Không lấy được danh mục", err);
@@ -29,14 +34,14 @@ const AddProductForm = ({ onFetchDataAgain }) => {
     loadCategories();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validate cơ bản đầu vào Frontend
@@ -55,14 +60,14 @@ const AddProductForm = ({ onFetchDataAgain }) => {
     };
 
     // Gọi action gửi dữ liệu lên Backend
-    dispatch(
+    void dispatch(
       addProduct(bodySubmit, () => {
         // Reset lại form sạch sẽ
         setFormData({ name: "", price: "", categoryId: "" });
 
         // Nếu có hàm callback tải lại trang từ App.js truyền xuống thì kích hoạt
         if (onFetchDataAgain) onFetchDataAgain();
-      }),
+      })
     );
   };
 

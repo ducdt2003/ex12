@@ -4,7 +4,7 @@ export const API_CONFIG = {
   TIMEOUT: 10000,
   ENDPOINTS: {
     PRODUCTS: '/products',
-    PRODUCT_BY_ID: (id) => `/products/${id}`,
+    PRODUCT_BY_ID: (id: string | number) => `/products/${id}`,
     SEARCH_PRODUCTS: '/products/search',
   },
 };

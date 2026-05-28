@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { Category } from '../types';
 import '../styles/CategoryList.css';
 
-function CategoryList({ onSelectCategory }) {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
+interface CategoryListProps {
+  onSelectCategory: (categoryId: string | number | null) => void;
+}
+
+const CategoryList: React.FC<CategoryListProps> = ({ onSelectCategory }) => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | number | null>(null);
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (): Promise<void> => {
     try {
-      // true Bắt đầu tải dữ liệu, đặt trạng thái loading
       setLoading(true);
       const response = await fetch('http://localhost:9091/api/categories');
       
@@ -24,14 +28,15 @@ function CategoryList({ onSelectCategory }) {
       const data = await response.json();
       setCategories(data.data || []);
       setError(null);
-    } catch (err) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : "Không thể tải danh mục";
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCategoryClick = (categoryId) => {
+  const handleCategoryClick = (categoryId: string | number) => {
     setSelectedId(categoryId);
     onSelectCategory(categoryId);
   };
@@ -81,10 +86,8 @@ function CategoryList({ onSelectCategory }) {
           ))}
         </div>
       )}
-
-      
     </div>
   );
-}
+};
 
 export default CategoryList;

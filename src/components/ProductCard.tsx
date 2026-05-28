@@ -1,12 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Đã tích hợp hook điều hướng
+import { useNavigate } from "react-router-dom";
+import { Product } from "../types";
 import "../styles/ProductCard.scss";
+
+interface ProductCardProps {
+  product: Product;
+}
 
 /**
  * Component hiển thị thông tin chi tiết dạng thẻ cho từng sản phẩm
  * @param {Object} product - Dữ liệu sản phẩm từ Backend
  */
-const ProductCard = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const navigate = useNavigate();
 
   const {
@@ -15,12 +20,12 @@ const ProductCard = ({ product }) => {
     description = "",
     price = 0,
     image = "",
-    categoryName = "", //Thay thế "category" thành "categoryName" khớp với API Spring Boot
-    stock = 10, // Giả định stock mặc định nếu backend chưa trả về field này
+    categoryName = "",
+    stock = 10,
   } = product || {};
 
   // Hàm điều hướng xử lý khi người dùng nhấn riêng vào nút "Xem chi tiết"
-  const handleViewDetails = (e) => {
+  const handleViewDetails = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Ngăn sự kiện nổi bọt (click trùng)
     navigate(`/products/${id}`); // Điều hướng sang URL: /products/:id
   };

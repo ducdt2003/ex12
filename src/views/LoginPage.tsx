@@ -3,26 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginAction } from "../store/actions/authActions";
 import "../styles/LoginPage.css";
+import { RootState, AppDispatch } from "../store";
 
-const LoginPage = () => {
-  const dispatch = useDispatch();
+const LoginPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  // gửi action lên store để cập nhật state.
-  // useSelector lấy dữ leeij state từ store
-
-  const { loading, error } = useSelector((state) => state.auth);
-  // ciudenso
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+  
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!credentials.username || !credentials.password) {
       return;
@@ -30,7 +28,7 @@ const LoginPage = () => {
     dispatch(
       loginAction(credentials, () => {
         navigate("/products");
-      }),
+      }) as any
     );
   };
 

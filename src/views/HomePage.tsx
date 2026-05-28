@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ProductsPage from "./ProductsPage";
-// import CategoriesPage from './CategoriesPage';
 import LandingPage from "./LandingPage";
 import "../styles/HomePage.scss";
 
@@ -8,8 +7,8 @@ import "../styles/HomePage.scss";
  * Trang chính với navigation
  * Cho phép chuyển đổi giữa Landing, Products và Categories
  */
-const HomePage = () => {
-  const [activePage, setActivePage] = useState("landing"); // Mặc định hiển thị landing page
+const HomePage: React.FC = () => {
+  const [activePage, setActivePage] = useState<string>("landing");
 
   // Đọc page/tab từ URL khi component mount
   useEffect(() => {
@@ -26,7 +25,7 @@ const HomePage = () => {
   }, []);
 
   // Cập nhật URL khi chuyển page/tab
-  const handleTabChange = (page) => {
+  const handleTabChange = (page: string) => {
     setActivePage(page);
     const params = new URLSearchParams(window.location.search);
 
@@ -46,7 +45,7 @@ const HomePage = () => {
   };
 
   // Callback từ LandingPage
-  const handleNavigateFromLanding = (destination) => {
+  const handleNavigateFromLanding = (destination: string) => {
     handleTabChange(destination);
   };
 
@@ -94,7 +93,6 @@ const HomePage = () => {
         {activePage === "landing" && (
           <LandingPage onNavigate={handleNavigateFromLanding} />
         )}
-        {/* {activePage === 'categories' && <CategoriesPage />} */}
         {activePage === "products" && <ProductsPage />}
       </div>
     </div>

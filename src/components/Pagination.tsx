@@ -1,6 +1,14 @@
 import React from "react";
 
-const Pagination = ({
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  isFirst: boolean;
+  isLast: boolean;
+  onPageChange: (page: number) => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   isFirst,

@@ -7,17 +7,22 @@ import {
   fetchProducts,
   fetchProductsByCategory,
 } from "../store/actions/productActions";
+import { RootState, AppDispatch } from "../store";
+
+interface ProductsPageProps {
+  categoryId?: string | number | null;
+}
 
 /**
  * Trang hiển thị danh sách sản phẩm với phân trang chuẩn
  */
-const ProductsPage = ({ categoryId }) => {
-  const dispatch = useDispatch();
+const ProductsPage: React.FC<ProductsPageProps> = ({ categoryId }) => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const { products, loading, error, currentPage, totalPages, isFirst, isLast } =
-    useSelector((state) => state.product);
+    useSelector((state: RootState) => state.product);
 
-  const [retryCount, setRetryCount] = useState(0);
+  const [retryCount, setRetryCount] = useState<number>(0);
 
   // Đọc số trang từ URL thanh địa
   useEffect(() => {
@@ -25,9 +30,9 @@ const ProductsPage = ({ categoryId }) => {
     const pageParam = parseInt(params.get("page") || "0", 10);
 
     if (categoryId) {
-      dispatch(fetchProductsByCategory(categoryId, pageParam, 10));
+      void dispatch(fetchProductsByCategory(categoryId, pageParam, 10));
     } else {
-      dispatch(fetchProducts(pageParam, 10));
+      void dispatch(fetchProducts(pageParam, 10));
     }
   }, [dispatch, categoryId, retryCount]);
 
@@ -36,7 +41,7 @@ const ProductsPage = ({ categoryId }) => {
     const pageParam = parseInt(params.get("page") || "0", 10);
 
     if (pageParam !== currentPage) {
-      params.set("page", currentPage);
+      params.set("page", currentPage.toString());
       window.history.pushState(
         {},
         "",
@@ -63,11 +68,11 @@ const ProductsPage = ({ categoryId }) => {
   };
 
   //5. HÀM SỬ LÝ KHI NGƯỜI DÙNG CLICK NÚT SỐ TRANG TRÊN THANH PHÂN TRANG
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
       // Cập nhật lại số trang mới lên URL trước để Effect #2 không bị lệch nhịp
       const params = new URLSearchParams(window.location.search);
-      params.set("page", newPage);
+      params.set("page", newPage.toString());
       window.history.pushState(
         {},
         "",
@@ -76,9 +81,9 @@ const ProductsPage = ({ categoryId }) => {
 
       // Gọi API lấy dữ liệu trang mới
       if (categoryId) {
-        dispatch(fetchProductsByCategory(categoryId, newPage, 10));
+        dispatch(fetchProductsByCategory(categoryId, newPage, 10) as any);
       } else {
-        dispatch(fetchProducts(newPage, 10));
+        dispatch(fetchProducts(newPage, 10) as any);
       }
     }
   };

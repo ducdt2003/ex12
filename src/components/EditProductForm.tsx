@@ -3,10 +3,18 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { updateProduct } from "../store/actions/productActions";
 import categoryService from "../services/categoryService";
+import { Product, Category } from "../types";
+import { AppDispatch } from "../store";
 
-const EditProductForm = ({ currentProduct, onCancel, onRefresh }) => {
-  const dispatch = useDispatch();
-  const [categories, setCategories] = useState([]);
+interface EditProductFormProps {
+  currentProduct: Product;
+  onCancel: () => void;
+  onRefresh: () => void;
+}
+
+const EditProductForm: React.FC<EditProductFormProps> = ({ currentProduct, onCancel, onRefresh }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,8 +27,8 @@ const EditProductForm = ({ currentProduct, onCancel, onRefresh }) => {
     if (currentProduct) {
       setFormData({
         name: currentProduct.name || "",
-        price: currentProduct.price || "",
-        categoryId: currentProduct.categoryId || "", // Nếu backend không trả về ID danh mục, người dùng sẽ tự chọn lại
+        price: currentProduct.price?.toString() || "",
+        categoryId: currentProduct.categoryId?.toString() || "",
       });
     }
 
@@ -35,11 +43,11 @@ const EditProductForm = ({ currentProduct, onCancel, onRefresh }) => {
     loadCategories();
   }, [currentProduct]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.price || !formData.categoryId) {
       toast.warning("⚠️ Vui lòng điền đầy đủ thông tin!", {
@@ -58,8 +66,8 @@ const EditProductForm = ({ currentProduct, onCancel, onRefresh }) => {
     // Gọi Thunk Action gửi request PUT lên Backend
     dispatch(
       updateProduct(currentProduct.id, bodySubmit, () => {
-        if (onRefresh) onRefresh(); // Tải lại danh sách sản phẩm hiển thị ngoài màn hình chính
-      }),
+        if (onRefresh) onRefresh();
+      }) as any
     );
   };
 
