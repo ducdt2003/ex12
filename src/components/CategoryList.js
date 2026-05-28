@@ -13,6 +13,7 @@ function CategoryList({ onSelectCategory }) {
 
   const fetchCategories = async () => {
     try {
+      // true Bắt đầu tải dữ liệu, đặt trạng thái loading
       setLoading(true);
       const response = await fetch('http://localhost:9091/api/categories');
       
@@ -25,7 +26,6 @@ function CategoryList({ onSelectCategory }) {
       setError(null);
     } catch (err) {
       setError(err.message);
-      console.error('Error fetching categories:', err);
     } finally {
       setLoading(false);
     }
@@ -81,6 +81,8 @@ function CategoryList({ onSelectCategory }) {
           ))}
         </div>
       )}
+
+      
     </div>
   );
 }

@@ -1,0 +1,219 @@
+.landing-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    // Tạo hiệu ứng nền chuyển màu gradient mượt mà từ xanh sang tím nhẹ như ảnh thực tế của bạn
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    &__nav {
+        background: rgba(25, 25, 25, 0.15); // Tạo hiệu ứng mờ nhẹ cho thanh nav
+        backdrop-filter: blur(5px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    &__nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    &__logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__logo-icon {
+        font-size: 26px;
+    }
+
+    &__logo-text {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    // Khối chứa nút Đăng nhập / Đăng xuất
+    &__auth-button {
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid transparent;
+
+        // Trạng thái khi chưa đăng nhập
+        &--login {
+            background-color: #ffffff;
+            color: #333333;
+            border-color: #dddddd;
+
+            &:hover {
+                background-color: #f5f5f5;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        // Trạng thái khi đã đăng nhập thành công
+        &--logout {
+            background-color: #dc3545;
+            color: #ffffff;
+
+            &:hover {
+                background-color: #bd2130;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            }
+        }
+    }
+
+    &__main {
+        flex: 1;
+        display: flex;
+        justify-content: flex-start; // Đẩy nội dung lệch về bên trái theo đúng UI thực tế của bạn
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    &__content {
+        max-width: 600px;
+        animation: fadeInUp 0.8s ease-out; // Hiệu ứng xuất hiện mượt khi load trang
+    }
+
+    &__title {
+        font-size: 48px;
+        font-weight: 800;
+        margin: 0 0 16px 0;
+        letter-spacing: -0.5px;
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+        margin: 0 0 32px 0;
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    &__button {
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &--primary {
+            background-color: #fffde7; // Màu kem nhạt giống trong ảnh nút Danh mục của bạn
+            color: #5d4037;
+
+            &:hover {
+                background-color: #fff9c4;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        &--secondary {
+            background-color: #fffde7; // Đồng bộ màu nút Sản phẩm
+            color: #5d4037;
+
+            &:hover {
+                background-color: #fff9c4;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+        }
+    }
+
+    &__footer {
+        padding: 24px 20px;
+        text-align: left; // Căn trái text bản quyền
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}
+
+// Định nghĩa hiệu ứng mượt mà khi mở trang lên
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Hỗ trợ hiển thị tốt trên thiết bị di động nhỏ gọn
+@media (max-width: 640px) {
+    .landing-page {
+        &__nav-container {
+            height: auto;
+            padding: 16px 20px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        &__main {
+            align-items: center;
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        &__title {
+            font-size: 36px;
+        }
+
+        &__buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        &__button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        &__footer {
+            text-align: center;
+        }
+    }
+}
